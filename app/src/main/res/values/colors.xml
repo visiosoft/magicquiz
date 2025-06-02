@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#BB86FC</color>
-    <color name="purple_500">#BB86FC</color>
-    <color name="purple_700">#9A67FC</color>
-    <color name="teal_200">#03DAC6</color>
-    <color name="teal_700">#018786</color>
+    <!-- Fun and vibrant colors -->
+    <color name="purple_200">#FF6B8B</color>
+    <color name="purple_500">#FF4D6D</color>
+    <color name="purple_700">#FF2E4D</color>
+    <color name="teal_200">#4ECDC4</color>
+    <color name="teal_700">#2E8B84</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     
-    <!-- Dark theme colors -->
-    <color name="background_dark">#FF121212</color>
-    <color name="surface_dark">#FF1E1E1E</color>
-    <color name="primary">#FF6200EE</color>
-    <color name="primary_dark">#FF6200EE</color>
-    <color name="primary_variant_dark">#FF3700B3</color>
-    <color name="secondary_dark">#FF03DAC5</color>
-    <color name="secondary_variant_dark">#FF018786</color>
-    <color name="error_dark">#FFCF6679</color>
-    <color name="on_primary_dark">#FFFFFFFF</color>
-    <color name="on_secondary_dark">#FF000000</color>
-    <color name="on_background_dark">#FFFFFFFF</color>
-    <color name="on_surface_dark">#FFFFFFFF</color>
-    <color name="on_error_dark">#FF000000</color>
-    <color name="accent_dark">#FF00FF00</color>
+    <!-- Theme colors -->
+    <color name="background_dark">#0A192F</color>
+    <color name="surface_dark">#112240</color>
+    <color name="primary">#FF6B8B</color>
+    <color name="primary_dark">#FF4D6D</color>
+    <color name="primary_variant_dark">#FF2E4D</color>
+    <color name="secondary_dark">#4ECDC4</color>
+    <color name="secondary_variant_dark">#2E8B84</color>
+    <color name="error_dark">#FF6B6B</color>
+    <color name="on_primary_dark">#FFFFFF</color>
+    <color name="on_secondary_dark">#000000</color>
+    <color name="on_background_dark">#FFFFFF</color>
+    <color name="on_surface_dark">#FFFFFF</color>
+    <color name="on_error_dark">#000000</color>
+    <color name="accent_dark">#FFD93D</color>
+    
+    <!-- Additional fun colors -->
+    <color name="fun_pink">#FF6B8B</color>
+    <color name="fun_blue">#4ECDC4</color>
+    <color name="fun_yellow">#FFD93D</color>
+    <color name="fun_purple">#9B5DE5</color>
+    <color name="fun_green">#00BBF9</color>
+    
+    <!-- Background gradient colors -->
+    <color name="bg_color1">#0A192F</color>  <!-- Dark blue -->
+    <color name="bg_color2">#112240</color>  <!-- Navy blue -->
+    <color name="bg_color3">#1A365D</color>  <!-- Deep blue -->
+    <color name="bg_color4">#2A4D69</color>  <!-- Steel blue -->
+    <color name="bg_color5">#3A6EA5</color>  <!-- Ocean blue -->
 </resources>
