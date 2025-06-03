@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.mpo.magicquiz.R
@@ -46,7 +47,11 @@ class LevelSelectionFragment : Fragment() {
             }
         } else {
             binding.level2Button.isEnabled = false
-            binding.level2Button.text = "Level 2 (Locked)"
+            binding.level2Button.text = "Level 2"
+            binding.level2Button.setCompoundDrawablesWithIntrinsicBounds(
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_lock),
+                null, null, null
+            )
             binding.level2Button.setOnClickListener {
                 Toast.makeText(context, "Complete Level 1 with 15+ score to unlock", Toast.LENGTH_SHORT).show()
             }
@@ -60,7 +65,11 @@ class LevelSelectionFragment : Fragment() {
             }
         } else {
             binding.level3Button.isEnabled = false
-            binding.level3Button.text = "Level 3 (Locked)"
+            binding.level3Button.text = "Level 3"
+            binding.level3Button.setCompoundDrawablesWithIntrinsicBounds(
+                ContextCompat.getDrawable(requireContext(), R.drawable.ic_lock),
+                null, null, null
+            )
             binding.level3Button.setOnClickListener {
                 Toast.makeText(context, "Complete Level 2 with 15+ score to unlock", Toast.LENGTH_SHORT).show()
             }
