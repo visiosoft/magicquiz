@@ -1,6 +1,7 @@
 package com.mpo.magicquiz.ads
 
 import android.content.Context
+import android.util.Log
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -14,7 +15,9 @@ class InterstitialAdManager(private val context: Context) {
     private var onAdDismissedCallback: (() -> Unit)? = null
 
     init {
-        MobileAds.initialize(context)
+        MobileAds.initialize(context) { initializationStatus ->
+            Log.d("InterstitialAdManager", "MobileAds initialization status: $initializationStatus")
+        }
         loadInterstitialAd()
     }
 
@@ -26,10 +29,12 @@ class InterstitialAdManager(private val context: Context) {
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    Log.e("InterstitialAdManager", "Ad failed to load: ${loadAdError.message}")
                     interstitialAd = null
                 }
 
                 override fun onAdLoaded(ad: InterstitialAd) {
+                    Log.d("InterstitialAdManager", "Ad loaded successfully")
                     interstitialAd = ad
                 }
             }
@@ -40,12 +45,14 @@ class InterstitialAdManager(private val context: Context) {
         onAdDismissedCallback = onAdDismissed
         interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
+                Log.d("InterstitialAdManager", "Ad dismissed")
                 interstitialAd = null
                 loadInterstitialAd() // Load the next ad
                 onAdDismissedCallback?.invoke()
             }
 
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                Log.e("InterstitialAdManager", "Ad failed to show: ${adError.message}")
                 interstitialAd = null
                 loadInterstitialAd() // Load the next ad
                 onAdDismissedCallback?.invoke()
@@ -53,6 +60,7 @@ class InterstitialAdManager(private val context: Context) {
         }
 
         interstitialAd?.show(context as android.app.Activity) ?: run {
+            Log.d("InterstitialAdManager", "Ad not loaded, skipping show")
             // If ad is not loaded, still invoke the callback
             onAdDismissedCallback?.invoke()
         }

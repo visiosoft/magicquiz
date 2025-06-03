@@ -13,7 +13,7 @@
     <color name="background_dark">#0A192F</color>
     <color name="surface_dark">#112240</color>
     <color name="primary">#FF6B8B</color>
-    <color name="primary_dark">#FF4D6D</color>
+    <color name="primary_dark">#1A1A1A</color>
     <color name="primary_variant_dark">#FF2E4D</color>
     <color name="secondary_dark">#4ECDC4</color>
     <color name="secondary_variant_dark">#2E8B84</color>
@@ -23,12 +23,12 @@
     <color name="on_background_dark">#FFFFFF</color>
     <color name="on_surface_dark">#FFFFFF</color>
     <color name="on_error_dark">#000000</color>
-    <color name="accent_dark">#FFD93D</color>
+    <color name="accent_dark">#4CAF50</color>
     
     <!-- Additional fun colors -->
     <color name="fun_pink">#FF6B8B</color>
     <color name="fun_blue">#4ECDC4</color>
-    <color name="fun_yellow">#FFD93D</color>
+    <color name="fun_yellow">#FFD700</color>
     <color name="fun_purple">#9B5DE5</color>
     <color name="fun_green">#00BBF9</color>
     
@@ -38,4 +38,6 @@
     <color name="bg_color3">#1A365D</color>  <!-- Deep blue -->
     <color name="bg_color4">#2A4D69</color>  <!-- Steel blue -->
     <color name="bg_color5">#3A6EA5</color>  <!-- Ocean blue -->
+    <color name="correct">#4CAF50</color>
+    <color name="wrong">#F44336</color>
 </resources>

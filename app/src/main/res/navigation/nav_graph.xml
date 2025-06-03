@@ -9,8 +9,8 @@
         android:name="com.mpo.magicquiz.ui.home.HomeFragment"
         android:label="Home">
         <action
-            android:id="@+id/action_homeFragment_to_questionFragment"
-            app:destination="@id/questionFragment"
+            android:id="@+id/action_home_to_level_selection"
+            app:destination="@id/levelSelectionFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -18,9 +18,29 @@
     </fragment>
 
     <fragment
+        android:id="@+id/levelSelectionFragment"
+        android:name="com.mpo.magicquiz.ui.level.LevelSelectionFragment"
+        android:label="Select Level">
+        <action
+            android:id="@+id/action_level_selection_to_question"
+            app:destination="@id/questionFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right">
+            <argument
+                android:name="level"
+                app:argType="integer" />
+        </action>
+    </fragment>
+
+    <fragment
         android:id="@+id/questionFragment"
-        android:name="com.mpo.magicquiz.ui.quiz.QuestionFragment"
+        android:name="com.mpo.magicquiz.ui.question.QuestionFragment"
         android:label="Question">
+        <argument
+            android:name="level"
+            app:argType="integer" />
         <action
             android:id="@+id/action_questionFragment_to_resultFragment"
             app:destination="@id/resultFragment"
@@ -38,9 +58,14 @@
             android:name="finalScore"
             app:argType="integer" />
         <action
-            android:id="@+id/action_resultFragment_to_homeFragment"
+            android:id="@+id/action_resultFragmentToHomeFragment"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_resultFragmentToLevelSelection"
+            app:destination="@id/levelSelectionFragment"
+            app:popUpTo="@id/levelSelectionFragment"
             app:popUpToInclusive="true" />
     </fragment>
 
