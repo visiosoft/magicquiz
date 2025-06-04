@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace 'com.mpo.magicquiz'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.mpo.magicquiz"
