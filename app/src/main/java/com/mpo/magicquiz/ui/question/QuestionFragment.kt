@@ -17,10 +17,6 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.google.android.gms.ads.nativead.NativeAd
-import com.google.android.gms.ads.nativead.NativeAdView
-import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.mpo.magicquiz.R
 import com.mpo.magicquiz.databinding.FragmentQuestionBinding
 
@@ -29,10 +25,8 @@ class QuestionFragment : Fragment() {
     private val binding get() = _binding!!
     private val args: QuestionFragmentArgs by navArgs()
     private val viewModel: QuestionViewModel by viewModels()
-    private var rewardedAd: RewardedAd? = null
     private var interstitialAd: InterstitialAd? = null
     private var adView: AdView? = null
-    private var nativeAd: NativeAd? = null
     private var questionCount = 0
 
     override fun onCreateView(
@@ -51,7 +45,6 @@ class QuestionFragment : Fragment() {
         MobileAds.initialize(requireContext())
 
         // Load ads
-        loadRewardedAd()
         loadInterstitialAd()
         loadBannerAd()
 
@@ -87,15 +80,6 @@ class QuestionFragment : Fragment() {
             }
         }
 
-        // Observe native ad
-        viewModel.nativeAd.observe(viewLifecycleOwner) { ad ->
-            nativeAd?.destroy()
-            nativeAd = ad
-            if (ad != null) {
-                populateNativeAdView(ad)
-            }
-        }
-
         // Observe score
         viewModel.score.observe(viewLifecycleOwner) { score ->
             binding.textScore.text = "Score: $score"
@@ -123,89 +107,10 @@ class QuestionFragment : Fragment() {
             }
         }
 
-        // Set up hint button
+        // Set up hint button - now shows hint directly without ads
         binding.buttonHint.setOnClickListener {
-            showRewardedAd()
+            showHint()
         }
-    }
-
-    private fun populateNativeAdView(nativeAd: NativeAd) {
-        // Create a new NativeAdView
-        val nativeAdView = layoutInflater.inflate(
-            R.layout.native_ad_layout,
-            binding.nativeAdContainer,
-            false
-        ) as NativeAdView
-
-        // Set the native ad view attributes
-        nativeAdView.headlineView = nativeAdView.findViewById(R.id.ad_headline)
-        nativeAdView.bodyView = nativeAdView.findViewById(R.id.ad_body)
-        nativeAdView.callToActionView = nativeAdView.findViewById(R.id.ad_call_to_action)
-        nativeAdView.iconView = nativeAdView.findViewById(R.id.ad_icon)
-        nativeAdView.priceView = nativeAdView.findViewById(R.id.ad_price)
-        nativeAdView.starRatingView = nativeAdView.findViewById(R.id.ad_stars)
-        nativeAdView.storeView = nativeAdView.findViewById(R.id.ad_store)
-        nativeAdView.advertiserView = nativeAdView.findViewById(R.id.ad_advertiser)
-
-        // Populate the native ad view
-        (nativeAdView.headlineView as TextView).text = nativeAd.headline
-        nativeAd.headline?.let { nativeAdView.headlineView?.visibility = View.VISIBLE }
-
-        if (nativeAd.body == null) {
-            nativeAdView.bodyView?.visibility = View.INVISIBLE
-        } else {
-            nativeAdView.bodyView?.visibility = View.VISIBLE
-            (nativeAdView.bodyView as TextView).text = nativeAd.body
-        }
-
-        if (nativeAd.callToAction == null) {
-            nativeAdView.callToActionView?.visibility = View.INVISIBLE
-        } else {
-            nativeAdView.callToActionView?.visibility = View.VISIBLE
-            (nativeAdView.callToActionView as Button).text = nativeAd.callToAction
-        }
-
-        if (nativeAd.icon == null) {
-            nativeAdView.iconView?.visibility = View.GONE
-        } else {
-            (nativeAdView.iconView as ImageView).setImageDrawable(nativeAd.icon?.drawable)
-            nativeAdView.iconView?.visibility = View.VISIBLE
-        }
-
-        if (nativeAd.price == null) {
-            nativeAdView.priceView?.visibility = View.INVISIBLE
-        } else {
-            nativeAdView.priceView?.visibility = View.VISIBLE
-            (nativeAdView.priceView as TextView).text = nativeAd.price
-        }
-
-        if (nativeAd.store == null) {
-            nativeAdView.storeView?.visibility = View.INVISIBLE
-        } else {
-            nativeAdView.storeView?.visibility = View.VISIBLE
-            (nativeAdView.storeView as TextView).text = nativeAd.store
-        }
-
-        if (nativeAd.starRating == null) {
-            nativeAdView.starRatingView?.visibility = View.INVISIBLE
-        } else {
-            (nativeAdView.starRatingView as RatingBar).rating = nativeAd.starRating!!.toFloat()
-            nativeAdView.starRatingView?.visibility = View.VISIBLE
-        }
-
-        if (nativeAd.advertiser == null) {
-            nativeAdView.advertiserView?.visibility = View.INVISIBLE
-        } else {
-            (nativeAdView.advertiserView as TextView).text = nativeAd.advertiser
-            nativeAdView.advertiserView?.visibility = View.VISIBLE
-        }
-
-        // Clear the native ad container and add the new native ad view
-        binding.nativeAdContainer.removeAllViews()
-        binding.nativeAdContainer.addView(nativeAdView)
-
-        // Register the native ad view
-        nativeAdView.setNativeAd(nativeAd)
     }
 
     private fun loadBannerAd() {
@@ -231,24 +136,6 @@ class QuestionFragment : Fragment() {
         adView?.loadAd(adRequest)
     }
 
-    private fun loadRewardedAd() {
-        val adRequest = AdRequest.Builder().build()
-        RewardedAd.load(
-            requireContext(),
-            "ca-app-pub-3940256099942544/5224354917", // Test ad unit ID
-            adRequest,
-            object : RewardedAdLoadCallback() {
-                override fun onAdLoaded(ad: RewardedAd) {
-                    rewardedAd = ad
-                }
-
-                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    rewardedAd = null
-                }
-            }
-        )
-    }
-
     private fun loadInterstitialAd() {
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(
@@ -265,24 +152,6 @@ class QuestionFragment : Fragment() {
                 }
             }
         )
-    }
-
-    private fun showRewardedAd() {
-        if (rewardedAd != null) {
-            rewardedAd?.show(requireActivity()) { rewardItem ->
-                // Show hint after ad is watched
-                binding.hintContainer.visibility = View.VISIBLE
-                binding.textHint.text = viewModel.getHint()
-                // Load the next ad
-                loadRewardedAd()
-            }
-        } else {
-            // If ad is not loaded, show hint anyway
-            binding.hintContainer.visibility = View.VISIBLE
-            binding.textHint.text = viewModel.getHint()
-            // Try to load the next ad
-            loadRewardedAd()
-        }
     }
 
     private fun showInterstitialAd() {
@@ -335,6 +204,11 @@ class QuestionFragment : Fragment() {
         }
     }
 
+    private fun showHint() {
+        binding.hintContainer.visibility = View.VISIBLE
+        binding.textHint.text = viewModel.getHint()
+    }
+
     override fun onPause() {
         adView?.pause()
         super.onPause()
@@ -346,7 +220,6 @@ class QuestionFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        nativeAd?.destroy()
         adView?.destroy()
         adView = null
         _binding = null

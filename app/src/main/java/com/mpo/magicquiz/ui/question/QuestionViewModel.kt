@@ -8,8 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.google.android.gms.ads.nativead.NativeAd
-import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.mpo.magicquiz.Question
 import com.mpo.magicquiz.Questions
 import com.mpo.magicquiz.data.LevelManager
@@ -19,7 +17,6 @@ import kotlinx.coroutines.launch
 class QuestionViewModel(application: Application) : AndroidViewModel(application) {
     private val levelManager = LevelManager(application)
     private var interstitialAd: InterstitialAd? = null
-    private var adLoader: AdLoader? = null
     
     private val _currentQuestion = MutableLiveData<Question>()
     val currentQuestion: LiveData<Question> = _currentQuestion
@@ -44,9 +41,6 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
 
     private val _showInterstitial = MutableLiveData<Boolean>()
     val showInterstitial: LiveData<Boolean> = _showInterstitial
-
-    private val _nativeAd = MutableLiveData<NativeAd>()
-    val nativeAd: LiveData<NativeAd> = _nativeAd
 
     private var currentQuestions: List<Question> = emptyList()
     private var currentQuestionIndex = 0
@@ -217,30 +211,5 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
                 else -> "Look for clues in the question that might help identify the correct answer"
             }
         } ?: "No hint available"
-    }
-
-    fun loadNativeAd(context: Application) {
-        adLoader = AdLoader.Builder(context, "ca-app-pub-3940256099942544/2247696110") // Test native ad unit ID
-            .forNativeAd { nativeAd ->
-                _nativeAd.value = nativeAd
-            }
-            .withAdListener(object : AdListener() {
-                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    _nativeAd.value = null
-                }
-            })
-            .withNativeAdOptions(
-                NativeAdOptions.Builder()
-                    .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT)
-                    .build()
-            )
-            .build()
-            
-        adLoader?.loadAd(AdRequest.Builder().build())
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        _nativeAd.value?.destroy()
     }
 } 
