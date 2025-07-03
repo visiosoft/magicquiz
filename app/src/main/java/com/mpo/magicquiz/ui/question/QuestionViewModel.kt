@@ -44,6 +44,7 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
 
     private var currentQuestions: List<Question> = emptyList()
     private var currentQuestionIndex = 0
+    private var currentHintIndex = 0
 
     init {
         _score.value = 0
@@ -61,6 +62,7 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
         _questionNumber.value = 1
         _isLevelComplete.value = false
         _showInterstitial.value = false
+        currentHintIndex = 0
         loadQuestionsForLevel(level)
         loadInterstitialAd()
     }
@@ -70,6 +72,8 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
             1 -> Questions.level1Questions
             2 -> Questions.level2Questions
             3 -> Questions.level3Questions
+            4 -> Questions.level4Questions
+            5 -> Questions.level5Questions
             else -> Questions.level1Questions
         }
         _totalQuestions.value = currentQuestions.size
@@ -79,6 +83,7 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
     fun loadQuestion(index: Int) {
         if (index < currentQuestions.size) {
             currentQuestionIndex = index
+            currentHintIndex = 0
             _currentQuestion.value = currentQuestions[index]
             _questionNumber.value = index + 1
         } else {
@@ -113,18 +118,19 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
         val totalQuestions = currentQuestions.size
         val currentLevel = _level.value ?: 1
         
-        // Check if score meets threshold for unlocking next level
-        if (currentScore >= 15) {
-            when (currentLevel) {
-                1 -> levelManager.unlockLevel(2)
-                2 -> levelManager.unlockLevel(3)
-            }
-        }
+        // Save the level score
+        levelManager.saveLevelScore(currentLevel, currentScore)
         
-        _feedback.value = when {
-            currentScore < 10 -> "Level Failed! Score: $currentScore/$totalQuestions"
-            currentScore < 15 -> "Average Performance! Score: $currentScore/$totalQuestions"
-            else -> "Congratulations! Excellent Score: $currentScore/$totalQuestions"
+        // Check if next level should be unlocked
+        val nextLevel = currentLevel + 1
+        if (nextLevel <= 5 && levelManager.isLevelUnlocked(nextLevel)) {
+            _feedback.value = "Congratulations! Level $nextLevel unlocked! Score: $currentScore/$totalQuestions"
+        } else {
+            _feedback.value = when {
+                currentScore < 10 -> "Level Failed! Score: $currentScore/$totalQuestions"
+                currentScore < 15 -> "Average Performance! Score: $currentScore/$totalQuestions"
+                else -> "Congratulations! Excellent Score: $currentScore/$totalQuestions"
+            }
         }
 
         // Show interstitial ad
@@ -159,57 +165,17 @@ class QuestionViewModel(application: Application) : AndroidViewModel(application
 
     fun getHint(): String {
         return _currentQuestion.value?.let { question ->
-            when {
-                question.question.contains("capital", ignoreCase = true) -> 
-                    "Think about the main city of the country"
-                question.question.contains("largest", ignoreCase = true) -> 
-                    "Consider which option represents the biggest or most significant"
-                question.question.contains("smallest", ignoreCase = true) -> 
-                    "Consider which option represents the least significant"
-                question.question.contains("planet", ignoreCase = true) -> 
-                    "Think about the unique characteristics of each planet"
-                question.question.contains("animal", ignoreCase = true) -> 
-                    "Consider the natural habitat and characteristics of each animal"
-                question.question.contains("ocean", ignoreCase = true) -> 
-                    "Think about the size and location of each ocean"
-                question.question.contains("mountain", ignoreCase = true) -> 
-                    "Consider the height and location of each mountain"
-                question.question.contains("river", ignoreCase = true) -> 
-                    "Think about the length and flow of each river"
-                question.question.contains("desert", ignoreCase = true) -> 
-                    "Consider the size and climate of each desert"
-                question.question.contains("country", ignoreCase = true) -> 
-                    "Think about the geographical location and characteristics"
-                question.question.contains("element", ignoreCase = true) -> 
-                    "Consider the periodic table and element properties"
-                question.question.contains("invention", ignoreCase = true) -> 
-                    "Think about the historical context and impact"
-                question.question.contains("discovery", ignoreCase = true) -> 
-                    "Consider the time period and significance"
-                question.question.contains("scientist", ignoreCase = true) -> 
-                    "Think about their major contributions and field of study"
-                question.question.contains("language", ignoreCase = true) -> 
-                    "Consider the number of speakers and geographical distribution"
-                question.question.contains("color", ignoreCase = true) -> 
-                    "Think about the primary colors and their combinations"
-                question.question.contains("number", ignoreCase = true) -> 
-                    "Consider mathematical properties and relationships"
-                question.question.contains("shape", ignoreCase = true) -> 
-                    "Think about geometric properties and dimensions"
-                question.question.contains("food", ignoreCase = true) -> 
-                    "Consider the origin and main ingredients"
-                question.question.contains("sport", ignoreCase = true) -> 
-                    "Think about the rules and equipment used"
-                question.question.contains("music", ignoreCase = true) -> 
-                    "Consider the genre and historical period"
-                question.question.contains("book", ignoreCase = true) -> 
-                    "Think about the author and publication date"
-                question.question.contains("movie", ignoreCase = true) -> 
-                    "Consider the director and release year"
-                question.question.contains("artist", ignoreCase = true) -> 
-                    "Think about their style and famous works"
-                else -> "Look for clues in the question that might help identify the correct answer"
+            if (question.hints.isNotEmpty()) {
+                val hint = question.hints[currentHintIndex % question.hints.size]
+                currentHintIndex++
+                hint
+            } else {
+                "No hint available"
             }
         } ?: "No hint available"
+    }
+
+    fun getCurrentHintIndex(): Int {
+        return currentHintIndex
     }
 } 

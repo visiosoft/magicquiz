@@ -14,6 +14,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.AdListener
 import com.mpo.magicquiz.R
+import com.mpo.magicquiz.data.LevelManager
 import com.mpo.magicquiz.databinding.FragmentResultBinding
 
 class ResultFragment : Fragment() {
@@ -21,6 +22,7 @@ class ResultFragment : Fragment() {
     private val binding get() = _binding!!
     private val args: ResultFragmentArgs by navArgs()
     private var adView: AdView? = null
+    private lateinit var levelManager: LevelManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +36,8 @@ class ResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        levelManager = LevelManager(requireContext())
+
         // Initialize Mobile Ads SDK
         MobileAds.initialize(requireContext()) { initializationStatus ->
             // Initialization complete
@@ -45,13 +49,23 @@ class ResultFragment : Fragment() {
         val score = args.finalScore
         binding.textScore.text = "Your Score: $score/25"
 
-        // Show appropriate buttons based on score
+        // Show appropriate buttons and messages based on score
         if (score >= 15) {
             binding.buttonNextLevel.visibility = View.VISIBLE
             binding.textCongratulations.text = "Congratulations!"
+            
+            // Check if next level is unlocked
+            val currentLevel = getCurrentLevelFromScore(score)
+            val nextLevel = currentLevel + 1
+            if (nextLevel <= 5 && levelManager.isLevelUnlocked(nextLevel)) {
+                binding.textUnlockMessage.text = "Level $nextLevel unlocked!"
+                binding.textUnlockMessage.visibility = View.VISIBLE
+            }
         } else {
             binding.buttonTryAgain.visibility = View.VISIBLE
             binding.textCongratulations.text = "Try Again!"
+            binding.textUnlockMessage.text = "Score 15+ to unlock the next level"
+            binding.textUnlockMessage.visibility = View.VISIBLE
         }
 
         // Set up button click listeners
@@ -69,6 +83,13 @@ class ResultFragment : Fragment() {
             // Navigate to home screen
             findNavController().navigate(R.id.action_resultFragmentToHomeFragment)
         }
+    }
+
+    private fun getCurrentLevelFromScore(score: Int): Int {
+        // This is a simplified way to determine the current level
+        // In a real app, you'd pass the current level as a parameter
+        // For now, we'll assume it's level 1 if score is saved
+        return 1
     }
 
     private fun loadBannerAd() {

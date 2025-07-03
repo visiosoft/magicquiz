@@ -33,45 +33,44 @@ class LevelSelectionFragment : Fragment() {
         setupLevelButtons()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Refresh level buttons in case scores have changed
+        setupLevelButtons()
+    }
+
     private fun setupLevelButtons() {
         // Level 1 is always unlocked
+        binding.level1Button.isEnabled = true
         binding.level1Button.setOnClickListener {
             navigateToQuestion(1)
         }
 
-        // Level 2
-        if (levelManager.isLevelUnlocked(2)) {
-            binding.level2Button.isEnabled = true
-            binding.level2Button.setOnClickListener {
-                navigateToQuestion(2)
-            }
-        } else {
-            binding.level2Button.isEnabled = false
-            binding.level2Button.text = "Level 2"
-            binding.level2Button.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_lock),
-                null, null, null
-            )
-            binding.level2Button.setOnClickListener {
-                Toast.makeText(context, "Complete Level 1 with 15+ score to unlock", Toast.LENGTH_SHORT).show()
-            }
-        }
+        // Check and setup other levels
+        setupLevelButton(2, binding.level2Button, binding.level2LockIcon, binding.level2UnlockMessage)
+        setupLevelButton(3, binding.level3Button, binding.level3LockIcon, binding.level3UnlockMessage)
+        setupLevelButton(4, binding.level4Button, binding.level4LockIcon, binding.level4UnlockMessage)
+        setupLevelButton(5, binding.level5Button, binding.level5LockIcon, binding.level5UnlockMessage)
+    }
 
-        // Level 3
-        if (levelManager.isLevelUnlocked(3)) {
-            binding.level3Button.isEnabled = true
-            binding.level3Button.setOnClickListener {
-                navigateToQuestion(3)
+    private fun setupLevelButton(level: Int, button: com.google.android.material.button.MaterialButton, 
+                                lockIcon: android.widget.ImageView, unlockMessage: android.widget.TextView) {
+        if (levelManager.isLevelUnlocked(level)) {
+            // Level is unlocked
+            button.isEnabled = true
+            lockIcon.visibility = View.GONE
+            unlockMessage.visibility = View.GONE
+            button.setOnClickListener {
+                navigateToQuestion(level)
             }
         } else {
-            binding.level3Button.isEnabled = false
-            binding.level3Button.text = "Level 3"
-            binding.level3Button.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(requireContext(), R.drawable.ic_lock),
-                null, null, null
-            )
-            binding.level3Button.setOnClickListener {
-                Toast.makeText(context, "Complete Level 2 with 15+ score to unlock", Toast.LENGTH_SHORT).show()
+            // Level is locked
+            button.isEnabled = false
+            lockIcon.visibility = View.VISIBLE
+            unlockMessage.visibility = View.VISIBLE
+            unlockMessage.text = levelManager.getUnlockMessage(level)
+            button.setOnClickListener {
+                Toast.makeText(context, "Complete the previous level first!", Toast.LENGTH_SHORT).show()
             }
         }
     }

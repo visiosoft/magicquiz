@@ -61,6 +61,7 @@ class QuestionFragment : Fragment() {
                 // Reset UI state for new question
                 binding.textFeedback.visibility = View.GONE
                 binding.hintContainer.visibility = View.GONE
+                binding.buttonHint.text = "Hint 1"
                 enableAllAnswerButtons()
                 
                 // Update answer buttons
@@ -206,7 +207,15 @@ class QuestionFragment : Fragment() {
 
     private fun showHint() {
         binding.hintContainer.visibility = View.VISIBLE
-        binding.textHint.text = viewModel.getHint()
+        val hint = viewModel.getHint()
+        binding.textHint.text = hint
+        
+        // Update hint button text to show hint number
+        val currentQuestion = viewModel.currentQuestion.value
+        if (currentQuestion != null) {
+            val hintNumber = ((viewModel.getCurrentHintIndex() - 1) % currentQuestion.hints.size) + 1
+            binding.buttonHint.text = "Hint $hintNumber"
+        }
     }
 
     override fun onPause() {

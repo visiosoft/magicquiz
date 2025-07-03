@@ -34,6 +34,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_select_level" />
 
+    <!-- Level 2 with lock -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/level2Button"
         android:layout_width="200dp"
@@ -48,6 +49,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/level1Button" />
 
+    <ImageView
+        android:id="@+id/level2LockIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_lock"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/level2Button"
+        app:layout_constraintTop_toTopOf="@id/level2Button"
+        app:layout_constraintBottom_toBottomOf="@id/level2Button" />
+
+    <TextView
+        android:id="@+id/level2UnlockMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Score 15/25 in Level 1 to unlock"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/level2Button" />
+
+    <!-- Level 3 with lock -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/level3Button"
         android:layout_width="200dp"
@@ -60,6 +86,108 @@
         app:cornerRadius="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/level2Button" />
+        app:layout_constraintTop_toBottomOf="@id/level2UnlockMessage" />
+
+    <ImageView
+        android:id="@+id/level3LockIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_lock"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/level3Button"
+        app:layout_constraintTop_toTopOf="@id/level3Button"
+        app:layout_constraintBottom_toBottomOf="@id/level3Button" />
+
+    <TextView
+        android:id="@+id/level3UnlockMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Score 15/25 in Level 2 to unlock"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/level3Button" />
+
+    <!-- Level 4 with lock -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/level4Button"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
+        android:text="Level 4"
+        android:textSize="20sp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        app:cornerRadius="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/level3UnlockMessage" />
+
+    <ImageView
+        android:id="@+id/level4LockIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_lock"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/level4Button"
+        app:layout_constraintTop_toTopOf="@id/level4Button"
+        app:layout_constraintBottom_toBottomOf="@id/level4Button" />
+
+    <TextView
+        android:id="@+id/level4UnlockMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Score 15/25 in Level 3 to unlock"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/level4Button" />
+
+    <!-- Level 5 with lock -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/level5Button"
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
+        android:text="Level 5"
+        android:textSize="20sp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        app:cornerRadius="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/level4UnlockMessage" />
+
+    <ImageView
+        android:id="@+id/level5LockIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_lock"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/level5Button"
+        app:layout_constraintTop_toTopOf="@id/level5Button"
+        app:layout_constraintBottom_toBottomOf="@id/level5Button" />
+
+    <TextView
+        android:id="@+id/level5UnlockMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Score 15/25 in Level 4 to unlock"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/level5Button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout> 

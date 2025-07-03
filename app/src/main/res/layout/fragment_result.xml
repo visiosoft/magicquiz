@@ -27,10 +27,24 @@
         android:text="Your Score: 0/25"
         android:textSize="24sp"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@id/button_container"
+        app:layout_constraintBottom_toTopOf="@id/text_unlock_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_congratulations" />
+
+    <TextView
+        android:id="@+id/text_unlock_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Level 2 unlocked!"
+        android:textSize="16sp"
+        android:textColor="@color/accent_dark"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/button_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_score" />
 
     <LinearLayout
         android:id="@+id/button_container"
@@ -42,7 +56,7 @@
         app:layout_constraintBottom_toTopOf="@id/ad_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_score">
+        app:layout_constraintTop_toBottomOf="@id/text_unlock_message">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_try_again"
